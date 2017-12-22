@@ -2,15 +2,19 @@
 <!--
   -     sad.moe
   -     Written by Trevor Hoglund (@trewbot)
-  -     2017.11.29
+  -     2017.12.21
   -->
 <html>
 	<head>
 		<title>):</title>
 		<meta charset="utf-8">
-		<meta name="viewport" content="user-scalable=no, initial-scale=1, width=device-width">
-        <link href="https://fonts.googleapis.com/css?family=Playfair+Display:900i" rel="stylesheet">
-		<link rel="shortcut icon" type="image/jpg" href="assets/fav.jpg"/>
+		<meta
+			name="viewport"
+			content="user-scalable=no, initial-scale=1, width=device-width">
+        <link
+			href="https://fonts.googleapis.com/css?family=Playfair+Display:900i"
+			rel="stylesheet">
+		<link href="assets/fav.jpg" rel="shortcut icon" type="image/jpg"/>
         <style>
 			html,body{margin:0;padding:0;overflow:hidden;}
             div.caption{
@@ -47,10 +51,10 @@
 		<script>
 			//	Create CONTROL Object
 			var CONTROL			= {
-				gamepadAdd		(gamepad){
-					var indx = gamepad.index;
+				gamepadAdd		(gp){
+					var indx = gp.index;
 					if(!CONTROL.gamepads[indx]){
-						CONTROL.gamepads[indx] = gamepad;
+						CONTROL.gamepads[indx] = gp;
 		                CONTROL.gamepadCount++;
 						CONTROL.gamepads[indx].buttonValue = (key)=>{
 							return function(){
@@ -79,10 +83,10 @@
 							CONTROL.gamepads[0].buttonValue(0)
 						);
 					}else{
-						for(let i in gamepad.buttons)
-							CONTROL.gamepads[indx].buttons[i] = gamepad.buttons[i];
-						for(let i in gamepad.axes)
-							CONTROL.gamepads[indx].axes[i] = gamepad.axes[i];
+						for(let i in gp.buttons)
+							CONTROL.gamepads[indx].buttons[i] = gp.buttons[i];
+						for(let i in gp.axes)
+							CONTROL.gamepads[indx].axes[i] = gp.axes[i];
 					}
 				},
 				gamepadCount	: 0,
@@ -100,7 +104,10 @@
 	                    if(i) CONTROL.gamepadAdd(i);
 				},
 				gamepads		: {},
-				keys			: {32:0,37:0,38:0,39:0,40:0,65:0,68:0,83:0,87:0},
+				keys			: {
+					32:0,37:0,38:0,39:0,40:0,
+					65:0,68:0,83:0,87:0
+				},
 				keyValue		(key,invert){
 					return function(){return (invert?-1:1)*CONTROL.keys[key]}
 				}
@@ -171,7 +178,7 @@
 					pitchObject	= new THREE.Object3D(),
 					yawObject	= new THREE.Object3D(),
 					PI_2		= Math.PI / 2;
-				camera.rotation.set(0,0,0);
+				camera.rotation.set(0,1,0);
 				pitchObject.add(camera);
 				yawObject.position.y = 10;
 				yawObject.add(pitchObject);
@@ -226,7 +233,10 @@
 					var direction	= new THREE.Vector3(0,0,-1);
 						rotation	= new THREE.Euler(0,0,0,"YXZ");
 					return function(v) {
-						rotation.set(pitchObject.rotation.x,yawObject.rotation.y,0);
+						rotation.set(
+							pitchObject.rotation.x,
+							yawObject.rotation.y,
+							0);
 						v.copy(direction).applyEuler(rotation);
 						return v;
 					};
@@ -239,7 +249,8 @@
 				update(){
 					//  Position controls
 					var position    = head().position.clone(),
-						forward     = (new THREE.Vector3(0,0,-1)).applyQuaternion(head().quaternion),
+						forward     = (new THREE.Vector3(0,0,-1))
+									  .applyQuaternion(head().quaternion),
 						strafe      = forward.clone().cross(camera.up),
 						speed       = PLAYER.walking,
 						fwdscale    = (Math.constrain(
@@ -384,7 +395,8 @@
 					}
 
 					//	Wall Collisions
-					var forward		= (new THREE.Vector3(0,0,-1)).applyQuaternion(head().quaternion),
+					var forward		= (new THREE.Vector3(0,0,-1))
+									  .applyQuaternion(head().quaternion),
 						right		= forward.clone().cross(camera.up),
 						backward	= right.clone().cross(camera.up),
 						left		= backward.clone().cross(camera.up),
